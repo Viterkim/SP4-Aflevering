@@ -1,0 +1,70 @@
+
+<html>
+    <head>
+        <title>2</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        The time is: 
+        <div id="clock"></div><br>
+        <div id="div1">Text Here</div>
+        <br>
+        <button type="button" id="btn1">Get 1 Person</button>
+        <br><br>
+        <form action="Front" method="POST" id="form1">
+            First Name:
+            <input type="text" id="firstName"><br>
+            Last Name:
+            <input type="text" id="lastName"><br>
+            <button type="submit" id="btnsub">Submit</button>
+        </form>
+        <script>
+            var personView = document.getElementById("div1");
+            var button = document.getElementById("btn1");
+            var url = "http://localhost:8084/JS4ExcAjax2/Front";
+            
+            //Get a new person
+            button.onclick = function()
+            {
+                fetch(url, {method: "get"}).then(function(response){
+                   return response.text(); 
+                }).then(function(text){
+                    var newPerson = JSON.parse(text);
+                    personView.innerHTML = "Firstname: " + newPerson.firstName + " | Lastname: " + newPerson.lastName;
+                });
+            }
+            
+
+            //Submit a new person
+            var form1 = document.getElementById("form1");
+            form1.onsubmit = function()
+            {
+                var firstName = document.getElementById("firstName").value;
+                var lastName = document.getElementById("lastName").value;
+                var promise = fetch(url, {method: "post", body: JSON.stringify({firstName: firstName, lastName: lastName})});
+                promise.then(function(response){
+                    return response.text();
+                }).then(function(text){
+                    personView.innerHTML = "Added " + firstName + " to the list!";
+                });
+
+                return false;
+            }
+            
+            //Clock
+            var clock = document.getElementById("clock");
+            var clockUrl = "http://localhost:8084/JS4ExcAjax2/ClockServlet";
+            setInterval(function()
+            {
+                fetch(clockUrl, {method: "get"}).then(function(response)
+                {
+                    return response.text();
+                }).then(function(text)
+                {
+                    clock.innerHTML = text;
+                });
+            }, 10);
+        </script>
+    </body>
+</html>

@@ -1,0 +1,45 @@
+
+<html>
+    <head>
+        <title>1</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <div id="div1">Flot Citat Her</div><br>
+        <div id="div2">Citat Hvert 10 Sekund (Ingen gider vente 1 time)</div>
+        <button type="button" id="btn1">Nyt Citat!</button>
+        
+        <script>
+            var div1 = document.getElementById("div1");
+            var btn1 = document.getElementById("btn1");
+            var method = {method: "get"};
+            var url = "http://localhost:8084/JS4ExcAjax1/Front"
+            
+            //Quote på Knappen
+            btn1.addEventListener("click", function(event)
+            {
+                fetch(url, method).then(function(response)
+                {
+                   return response.text();
+                }).then(function(text)
+                {
+                    div1.innerHTML = text;
+                });
+            });
+            
+            //Quote hvert 5 sekund (ingen gider vente 1 time)
+            var div2 = document.getElementById("div2");
+            setInterval(function()
+            {
+                fetch(url, method).then(function(response)
+                {
+                    return response.text();
+                }).then(function(text)
+                {
+                    div2.innerHTML = text;
+                });
+            }, 5000);
+        </script>
+    </body>
+</html>
